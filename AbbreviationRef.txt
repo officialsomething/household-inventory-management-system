@@ -1,0 +1,3 @@
+DG = Dry Goods
+SA = Sauce
+SP = Spice
