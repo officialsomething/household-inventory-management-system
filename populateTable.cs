@@ -1,69 +1,64 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Windows.Markup;
-using createTable.cs;
 
-public class PopTableClass
+namespace IMS
 {
-    public string[] parseFile(string filePath)
+    public class PopTableClass
     {
-        string [] myValues;
+        private readonly DataTable pantryTable;
 
-        using(StreamReader reader = new StreamReader(filePath))
+        public PopTableClass(DataTable pantryTable)
         {
-            string line;
-            while((line = reader.ReadLine()) != null)
+            this.pantryTable = pantryTable;
+        }
+
+        public string[] parseFile(string filePath)
+        {
+            List<string> myValues = new List<string>();
+
+            using(StreamReader reader = new StreamReader(filePath))
             {
-                // split the csv file based on commas
-                myValues = line.Split(',');
+                string line;
+                while((line = reader.ReadLine()) != null)
+                {
+                    // split the csv file based on commas
+                    myValues.AddRange(line.Split(','));
+                }
             }
-        }
 
-        if(myValues == null || myValues.Length() == 0)
-        {
-            Console.log("Empty array, csv was not parsed.");
-        }
-
-        return myValues;
-    }
-
-    public void fillDataTablePantry(string[] myValues)
-    {
-        int count = 0;
-
-        while(count < myValues.Length())
-        {
-            for(int i = 0; i < 3; i++)
+            if(myValues.Count == 0)
             {
+                Console.WriteLine("Empty array, csv was not parsed.");
+            }
+
+            return myValues.ToArray();
+        }
+
+        public void fillDataTablePantry(string[] myValues)
+        {
+            // each row uses 4 values from the array; the first 4 are the csv header
+            for(int count = 4; count < myValues.Length; count += 4)
+            {
+                if(count + 3 >= myValues.Length)
+                {
+                    arrayError();
+                    return;
+                }
+
                 DataRow workRow = pantryTable.NewRow();
                 workRow[0] = myValues[count];
-                count++;
-                if(count == myValues.Length())
-                {
-                    arrayError();
-                }
-                workRow[1] = myValues[count];
-                count++;
-                if(count == myValues.Length())
-                {
-                    arrayError();
-                }
-                workRow[2] = myValues[count];
-                count++;
-                if(count == myValues.Length())
-                {
-                    arrayError();
-                }
+                workRow[1] = myValues[count + 1];
+                workRow[2] = myValues[count + 2];
+                workRow[3] = myValues[count + 3];
                 pantryTable.Rows.Add(workRow);
             }
         }
-    }
 
-    public void arrayError()
-    {
-        Console.log("Array out of bounds!");
+        public void arrayError()
+        {
+            Console.WriteLine("Array out of bounds!");
+        }
     }
 }
-
-

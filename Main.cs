@@ -1,12 +1,27 @@
-using populateTable.cs;
+using System;
+using System.Data;
+using System.IO;
 
-class Program
+// dotnet run --project IMS.csproj
+
+namespace IMS
 {
-    static void Main()
+    class Program
     {
-        string readNext = "pantryInventory.csv";
-        PopTableClass popPantryTable = new PopTableClass();
-        string[] indexedItemsArray = popPantryTable.parseFile(readNext);
-        popPantryTable.fillDataTablePantry(indexedItemsArray);
+        static void Main()
+        {
+            string readNext = "pantryInventory.csv";
+            manageTables tables = new manageTables();
+            PopTableClass popPantryTable = new PopTableClass(tables.pantryTable);
+            string[] indexedItemsArray = popPantryTable.parseFile(readNext);
+
+            // check to see if the file was parsed correctly
+            for(int i = 0; i < indexedItemsArray.Length; i++)
+            {
+                Console.WriteLine(indexedItemsArray[i]);
+            }
+
+            popPantryTable.fillDataTablePantry(indexedItemsArray);
+        }
     }
 }

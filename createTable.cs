@@ -1,25 +1,31 @@
 using System.Data;
 
-class manageTables
+namespace IMS
 {
-    public DataSet Pantry = new("Pantry");
-    public DataTable pantryTable = Pantry.Tables.Add("pantryTable");
-    public DataSet CleaningSupplies = new("CleaningSupplies");
-    public DataTable cleaningSuppliesTable = CleaningSupplies.Tables.Add("cleaningSuppliesTable");
+    public class manageTables
+    {
+        public DataSet Pantry = new("Pantry");
+        public DataTable pantryTable;
+        public DataSet CleaningSupplies = new("CleaningSupplies");
+        public DataTable cleaningSuppliesTable;
 
-    public manageTables()
-    {        
-        DataColumn pantryID = pantryTable.Columns.Add("Abbreviation", typeof(string));
-        pantryTable.Columns.Add("Name", typeof(string));
-        pantryTable.Columns.Add("Quantity", typeof(int));
-        pantryTable.Columns.Add("Unit", typeof(string));
+        public manageTables()
+        {
+            pantryTable = Pantry.Tables.Add("pantryTable");
+            cleaningSuppliesTable = CleaningSupplies.Tables.Add("cleaningSuppliesTable");
 
-        pantryTable.PrimaryKey = new DataColumn[] { pantryID };
+            DataColumn pantryID = pantryTable.Columns.Add("Abbreviation", typeof(string));
+            pantryTable.Columns.Add("Name", typeof(string));
+            pantryTable.Columns.Add("Quantity", typeof(int));
+            pantryTable.Columns.Add("Unit", typeof(string));
 
-        DataColumn cleaningID = cleaningSuppliesTable.Columns.Add("Abbreviation", typeof(string));
-        cleaningSuppliesTable.Columns.Add("Name", typeof(string));
-        cleaningSuppliesTable.Columns.Add("Quantitiy");
+            pantryTable.PrimaryKey = new DataColumn[] { pantryID };
 
-        cleaningSuppliesTable.PrimaryKey = new DataColumn[] { cleaningID };
-    }
+            DataColumn cleaningID = cleaningSuppliesTable.Columns.Add("Abbreviation", typeof(string));
+            cleaningSuppliesTable.Columns.Add("Name", typeof(string));
+            cleaningSuppliesTable.Columns.Add("Quantity");
+
+            cleaningSuppliesTable.PrimaryKey = new DataColumn[] { cleaningID };
+        }
+    }   
 }
